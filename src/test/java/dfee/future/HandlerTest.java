@@ -312,7 +312,7 @@ public class HandlerTest {
                     v ->
                         Future.fromCompletableFuture(
                                 CompletableFuture.supplyAsync(() -> v, directExecutor()))
-                            // executing on vavr's DEFAULT_EXECUTOR, so won't have it
+                            // executing on *our* direct executor, expecting to have it, but don't
                             .map(assertContextValueIsNull()))
                 .map(assertReturnValueEquals(contextValue))
                 // we *might* get back to the original thread; indeterminate
@@ -353,8 +353,9 @@ public class HandlerTest {
                 .flatMap(
                     v ->
                         Future.fromCompletableFuture(
-                                CompletableFuture.supplyAsync(() -> v, directExecutor()))
-                            // executing on vavr's DEFAULT_EXECUTOR, so won't have it
+                                CompletableFuture.supplyAsync(
+                                    () -> v, Context.currentContextExecutor(EXECUTOR)))
+                            // executing on *our* context executor, expecting to have it, but don't
                             .map(assertContextValueIsNull()))
                 .map(assertReturnValueEquals(contextValue))
                 // we *might* get back to the original thread; indeterminate
