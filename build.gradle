@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group 'dfee.future'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.grpc:grpc-context:1.29.0'
+    implementation 'io.vavr:vavr:0.10.2'
+    testImplementation 'com.google.truth:truth:1.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+
+    systemProperty 'java.util.logging.config.file', "${project.buildDir}/resources/test/logging-test.properties"
+
+    forkEvery = 1
+
+    testLogging {
+        showStandardStreams = true
+    }
+}
